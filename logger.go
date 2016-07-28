@@ -55,7 +55,7 @@ func (l *Logger) Infof(format string, message ...interface{}) {
 	if l.getLogLevel() < INFO {
 		return
 	}
-	l.logger.Println("[INFO] ", fmt.Sprintf(format, message...))
+	l.logger.Println("[INFO]", fmt.Sprintf(format, message...))
 }
 
 func (l *Logger) Warning(message ...interface{}) {
@@ -76,7 +76,7 @@ func (l *Logger) Errorf(format string, message ...interface{}) {
 	if l.getLogLevel() < ERROR {
 		return
 	}
-	l.logger.Println("[ERROR] ", fmt.Sprintf(format, message...))
+	l.logger.Println("[ERROR]", fmt.Sprintf(format, message...))
 }
 
 
