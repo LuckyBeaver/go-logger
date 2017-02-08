@@ -22,13 +22,12 @@ type Logger struct {
 	logger   *log.Logger
 	writer   *io.Writer
 	logLevel int32
-	showDateTime int32
 }
 
 var logSingleton = New(os.Stdout, DEBUG)
 
 func New(writer io.Writer, logLevel int) *Logger {
-	logger := Logger{logLevel: int32(logLevel), writer: &writer, showDateTime: 1}
+	logger := Logger{logLevel: int32(logLevel), writer: &writer}
 	logger.logger = log.New(writer, "", log.LstdFlags)
 	return &logger
 }
@@ -43,10 +42,6 @@ func (l *Logger) SetlogLevel(loglevel int) {
 
 func (l *Logger) SetFlags(flag int)  {
 	l.logger.SetFlags(flag)
-}
-
-func (l *Logger) IsShowDateTime() bool {
-	return atomic.LoadInt32(l.showDateTime) > 0
 }
 
 func (l *Logger) print(logLevel int, message ...interface{}) {
