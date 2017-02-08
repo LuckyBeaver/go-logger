@@ -41,7 +41,7 @@ func (l *Logger) SetlogLevel(loglevel int) {
 	atomic.StoreInt32(&l.logLevel, int32(loglevel))
 }
 
-func (l *Logger) SetFlags(flag bool)  {
+func (l *Logger) SetFlags(flag int)  {
 	l.logger.SetFlags(flag)
 }
 
