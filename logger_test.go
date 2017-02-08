@@ -14,7 +14,7 @@ func TestDebug(t *testing.T) {
 	SetLogger(logger)
 	SetFlags(0)
 	Trace(`test trace`)
-	Debug(`test debug`)
+	Debug(`test`,`debug`)
 	Errorf(`%s qwe %d`, `test error`, 123)
 
 
@@ -27,7 +27,7 @@ func TestDebug(t *testing.T) {
 	st.Expect(t, scanner.Text(), `[ERROR] test error qwe 123`)
 
 	SetLogLevel(TRACE)
-	Tracef(`test trace 2`)
+	Trace(`test`,`trace`, 2)
 
 	scanner.Scan()
 	st.Expect(t, scanner.Text(), `[TRACE] test trace 2`)

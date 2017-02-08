@@ -15,10 +15,10 @@ const (
 	DEBUG = 4
 	TRACE = 5
 )
+
 var LOG_LEVEL = map[int]string{1: `ERROR`, 2: `WARNING`, 3: `INFO`, 4: `DEBUG`, 5: `TRACE`}
 
 type Logger struct {
-
 	logger   *log.Logger
 	writer   *io.Writer
 	logLevel int32
@@ -40,7 +40,7 @@ func (l *Logger) SetLogLevel(loglevel int) {
 	atomic.StoreInt32(&l.logLevel, int32(loglevel))
 }
 
-func (l *Logger) SetFlags(flag int)  {
+func (l *Logger) SetFlags(flag int) {
 	l.logger.SetFlags(flag)
 }
 
@@ -48,16 +48,14 @@ func (l *Logger) print(logLevel int, message ...interface{}) {
 	if l.getLogLevel() < logLevel {
 		return
 	}
-	l.logger.Printf(`[%s] %s`,LOG_LEVEL[logLevel], fmt.Sprintln(message...))
+	msgs := make([]interface{}, 1, len(message) + 1)
+	msgs[0] = fmt.Sprintf(`[%s]`, LOG_LEVEL[logLevel])
+	l.logger.Println(append(msgs, message...)...)
 }
 
 func (l *Logger) printf(logLevel int, format string, message ...interface{}) {
-	if l.getLogLevel() < logLevel {
-		return
-	}
-	l.logger.Println(fmt.Sprintf(`[%s] %s`, LOG_LEVEL[logLevel], fmt.Sprintf(format, message...)))
+	l.print(logLevel, fmt.Sprintf(format, message...))
 }
-
 
 func (l *Logger) Trace(message ...interface{}) {
 	l.print(TRACE, message...)
@@ -98,8 +96,6 @@ func (l *Logger) Error(message ...interface{}) {
 func (l *Logger) Errorf(format string, message ...interface{}) {
 	l.printf(ERROR, format, message...)
 }
-
-
 
 func SetLogger(l *Logger) {
 	logSingleton = l
