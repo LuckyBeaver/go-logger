@@ -48,14 +48,14 @@ func (l *Logger) print(logLevel int, message ...interface{}) {
 	if l.getLogLevel() < logLevel {
 		return
 	}
-	l.logger.Print(LOG_LEVEL[logLevel], fmt.Sprintln(message...))
+	l.logger.Printf(`[%s] %s`,LOG_LEVEL[logLevel], fmt.Sprintln(message...))
 }
 
 func (l *Logger) printf(logLevel int, format string, message ...interface{}) {
 	if l.getLogLevel() < logLevel {
 		return
 	}
-	l.logger.Println(LOG_LEVEL[logLevel], fmt.Sprintf(format, message...))
+	l.logger.Println(fmt.Sprintf(`[%s] %s`, LOG_LEVEL[logLevel], fmt.Sprintf(format, message...)))
 }
 
 
