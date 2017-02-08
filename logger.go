@@ -1,4 +1,4 @@
-package logger
+package log
 
 import (
 	"fmt"
@@ -13,18 +13,22 @@ const (
 	WARNING = 2
 	INFO = 3
 	DEBUG = 4
+	TRACE = 5
 )
+var LOG_LEVEL = map[int]string{1: `ERROR`, 2: `WARNING`, 3: `INFO`, 4: `DEBUG`, 5: `TRACE`}
 
 type Logger struct {
+
 	logger   *log.Logger
 	writer   *io.Writer
 	logLevel int32
+	showDateTime int32
 }
 
 var logSingleton = New(os.Stdout, DEBUG)
 
 func New(writer io.Writer, logLevel int) *Logger {
-	logger := Logger{logLevel: int32(logLevel), writer: &writer}
+	logger := Logger{logLevel: int32(logLevel), writer: &writer, showDateTime: 1}
 	logger.logger = log.New(writer, "", log.LstdFlags)
 	return &logger
 }
@@ -37,46 +41,67 @@ func (l *Logger) SetlogLevel(loglevel int) {
 	atomic.StoreInt32(&l.logLevel, int32(loglevel))
 }
 
-func (l *Logger) Debug(message ...interface{}) {
-	if l.getLogLevel() < DEBUG {
+func (l *Logger) SetFlags(flag bool)  {
+	l.logger.SetFlags(flag)
+}
+
+func (l *Logger) IsShowDateTime() bool {
+	return atomic.LoadInt32(l.showDateTime) > 0
+}
+
+func (l *Logger) print(logLevel int, message ...interface{}) {
+	if l.getLogLevel() < logLevel {
 		return
 	}
-	l.logger.Print("[DEBUG] ", fmt.Sprintln(message...))
+	l.logger.Print(LOG_LEVEL[logLevel], fmt.Sprintln(message...))
+}
+
+func (l *Logger) printf(logLevel int, format string, message interface{}) {
+	if l.getLogLevel() < logLevel {
+		return
+	}
+	l.logger.Println(LOG_LEVEL[logLevel], fmt.Sprintf(format, message...))
+}
+
+
+func (l *Logger) Trace(message ...interface{}) {
+	l.print(TRACE, message)
+}
+
+func (l *Logger) Tracef(format string, message ...interface{}) {
+	l.printf(TRACE, format, message)
+}
+
+func (l *Logger) Debug(message ...interface{}) {
+	l.print(DEBUG, message)
+}
+
+func (l *Logger) Debugf(format string, message ...interface{}) {
+	l.printf(DEBUG, format, message)
 }
 
 func (l *Logger) Info(message ...interface{}) {
-	if l.getLogLevel() < INFO {
-		return
-	}
-	l.logger.Print("[INFO] ", fmt.Sprintln(message...))
+	l.print(INFO, message)
 }
 
 func (l *Logger) Infof(format string, message ...interface{}) {
-	if l.getLogLevel() < INFO {
-		return
-	}
-	l.logger.Println("[INFO]", fmt.Sprintf(format, message...))
+	l.printf(INFO, format, message)
 }
 
 func (l *Logger) Warning(message ...interface{}) {
-	if l.getLogLevel() < WARNING {
-		return
-	}
-	l.logger.Print("[WARNING] ", fmt.Sprintln(message...))
+	l.print(WARNING, message)
+}
+
+func (l *Logger) Warningf(format string, message ...interface{}) {
+	l.printf(WARNING, format, message)
 }
 
 func (l *Logger) Error(message ...interface{}) {
-	if l.getLogLevel() < ERROR {
-		return
-	}
-	l.logger.Print("[ERROR] ", fmt.Sprintln(message...))
+	l.print(ERROR, message)
 }
 
 func (l *Logger) Errorf(format string, message ...interface{}) {
-	if l.getLogLevel() < ERROR {
-		return
-	}
-	l.logger.Println("[ERROR]", fmt.Sprintf(format, message...))
+	l.printf(ERROR, format, message)
 }
 
 
@@ -89,58 +114,42 @@ func SetLogLevel(loglevel int) {
 	logSingleton.SetlogLevel(loglevel)
 }
 
+func Trace(message ...interface{}) {
+	logSingleton.Trace(message)
+}
+
+func Tracef(format string, message ...interface{}) {
+	logSingleton.Tracef(format, message)
+}
+
 func Debug(message ...interface{}) {
-	if logSingleton.logLevel < DEBUG {
-		return
-	}
-	logSingleton.logger.Print("[DEBUG] ", fmt.Sprintln(message...))
+	logSingleton.Debug(message)
 }
 
 func Debugf(format string, message ...interface{}) {
-	if logSingleton.logLevel < DEBUG {
-		return
-	}
-	logSingleton.logger.Print("[DEBUG] ", fmt.Sprintf(format, message...))
+	logSingleton.Debugf(format, message)
 }
 
 func Info(message ...interface{}) {
-	if logSingleton.logLevel < INFO {
-		return
-	}
-	logSingleton.logger.Print("[INFO] ", fmt.Sprintln(message...))
+	logSingleton.Info(message)
 }
 
 func Infof(format string, message ...interface{}) {
-	if logSingleton.logLevel < INFO {
-		return
-	}
-	logSingleton.logger.Println("[INFO] ", fmt.Sprintf(format, message...))
+	logSingleton.Infof(format, message)
 }
 
 func Warning(message ...interface{}) {
-	if logSingleton.logLevel < WARNING {
-		return
-	}
-	logSingleton.logger.Print("[WARNING] ", fmt.Sprintln(message...))
+	logSingleton.Warning(message)
 }
 
 func Warningf(format string, message ...interface{}) {
-	if logSingleton.logLevel < WARNING {
-		return
-	}
-	logSingleton.logger.Print("[WARNING] ", fmt.Sprintf(format, message...))
+	logSingleton.Warningf(format, message)
 }
 
 func Error(message ...interface{}) {
-	if logSingleton.logLevel < ERROR {
-		return
-	}
-	logSingleton.logger.Print("[ERROR] ", fmt.Sprintln(message...))
+	logSingleton.Error(message)
 }
 
 func Errorf(format string, message ...interface{}) {
-	if logSingleton.logLevel < ERROR {
-		return
-	}
-	logSingleton.logger.Println("[ERROR] ", fmt.Sprintf(format, message...))
+	logSingleton.Errorf(format, message)
 }
