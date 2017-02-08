@@ -36,7 +36,7 @@ func (l *Logger) getLogLevel() int {
 	return int(atomic.LoadInt32(&l.logLevel))
 }
 
-func (l *Logger) SetlogLevel(loglevel int) {
+func (l *Logger) SetLogLevel(loglevel int) {
 	atomic.StoreInt32(&l.logLevel, int32(loglevel))
 }
 
@@ -105,46 +105,50 @@ func SetLogger(l *Logger) {
 	logSingleton = l
 }
 
+func SetFlags(flags int) {
+	logSingleton.SetFlags(flags)
+}
+
 func SetLogLevel(loglevel int) {
-	logSingleton.SetlogLevel(loglevel)
+	logSingleton.SetLogLevel(loglevel)
 }
 
 func Trace(message ...interface{}) {
-	logSingleton.Trace(message)
+	logSingleton.Trace(message...)
 }
 
 func Tracef(format string, message ...interface{}) {
-	logSingleton.Tracef(format, message)
+	logSingleton.Tracef(format, message...)
 }
 
 func Debug(message ...interface{}) {
-	logSingleton.Debug(message)
+	logSingleton.Debug(message...)
 }
 
 func Debugf(format string, message ...interface{}) {
-	logSingleton.Debugf(format, message)
+	logSingleton.Debugf(format, message...)
 }
 
 func Info(message ...interface{}) {
-	logSingleton.Info(message)
+	logSingleton.Info(message...)
 }
 
 func Infof(format string, message ...interface{}) {
-	logSingleton.Infof(format, message)
+	logSingleton.Infof(format, message...)
 }
 
 func Warning(message ...interface{}) {
-	logSingleton.Warning(message)
+	logSingleton.Warning(message...)
 }
 
 func Warningf(format string, message ...interface{}) {
-	logSingleton.Warningf(format, message)
+	logSingleton.Warningf(format, message...)
 }
 
 func Error(message ...interface{}) {
-	logSingleton.Error(message)
+	logSingleton.Error(message...)
 }
 
 func Errorf(format string, message ...interface{}) {
-	logSingleton.Errorf(format, message)
+	logSingleton.Errorf(format, message...)
 }

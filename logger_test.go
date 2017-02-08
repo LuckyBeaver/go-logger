@@ -11,10 +11,11 @@ func TestDebug(t *testing.T) {
 	tmp := bytes.NewBufferString(``)
 
 	logger := New(tmp, DEBUG)
-	logger.SetFlags(0)
-	logger.Trace(`test trace`)
-	logger.Debug(`test debug`)
-	logger.Errorf(`%s qwe %d`, `test error`, 123)
+	SetLogger(logger)
+	SetFlags(0)
+	Trace(`test trace`)
+	Debug(`test debug`)
+	Errorf(`%s qwe %d`, `test error`, 123)
 
 
 	scanner := bufio.NewScanner(tmp)
@@ -25,8 +26,8 @@ func TestDebug(t *testing.T) {
 	scanner.Scan()
 	st.Expect(t, scanner.Text(), `[ERROR] test error qwe 123`)
 
-	logger.SetlogLevel(TRACE)
-	logger.Tracef(`test trace 2`)
+	SetLogLevel(TRACE)
+	Tracef(`test trace 2`)
 
 	scanner.Scan()
 	st.Expect(t, scanner.Text(), `[TRACE] test trace 2`)
