@@ -60,43 +60,43 @@ func (l *Logger) printf(logLevel int, format string, message ...interface{}) {
 
 
 func (l *Logger) Trace(message ...interface{}) {
-	l.print(TRACE, message)
+	l.print(TRACE, message...)
 }
 
 func (l *Logger) Tracef(format string, message ...interface{}) {
-	l.printf(TRACE, format, message)
+	l.printf(TRACE, format, message...)
 }
 
 func (l *Logger) Debug(message ...interface{}) {
-	l.print(DEBUG, message)
+	l.print(DEBUG, message...)
 }
 
 func (l *Logger) Debugf(format string, message ...interface{}) {
-	l.printf(DEBUG, format, message)
+	l.printf(DEBUG, format, message...)
 }
 
 func (l *Logger) Info(message ...interface{}) {
-	l.print(INFO, message)
+	l.print(INFO, message...)
 }
 
 func (l *Logger) Infof(format string, message ...interface{}) {
-	l.printf(INFO, format, message)
+	l.printf(INFO, format, message...)
 }
 
 func (l *Logger) Warning(message ...interface{}) {
-	l.print(WARNING, message)
+	l.print(WARNING, message...)
 }
 
 func (l *Logger) Warningf(format string, message ...interface{}) {
-	l.printf(WARNING, format, message)
+	l.printf(WARNING, format, message...)
 }
 
 func (l *Logger) Error(message ...interface{}) {
-	l.print(ERROR, message)
+	l.print(ERROR, message...)
 }
 
 func (l *Logger) Errorf(format string, message ...interface{}) {
-	l.printf(ERROR, format, message)
+	l.printf(ERROR, format, message...)
 }
 
 
